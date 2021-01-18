@@ -7,6 +7,12 @@ import About from "../components/About"
 import RoomHandler from "../components/RoomHandler"
 import Logout from "../components/Logout"
 import Vitals from "../components/subComponents/Vitals"
+import ButtonHandler from "../components/subComponents/ButtonHandler"
+import SubEventHandler from "../components/subComponents/SubEventHandler"
+import SubEventButtonHandler from "../components/subComponents/SubEventButtonHandler"
+
+
+
 import Game from "../components/Game"
 export {
     MainMenu,
@@ -18,7 +24,10 @@ export {
     Logout,
     Vitals,
     RoomHandler,
-    Game
+    Game,
+    ButtonHandler,
+    SubEventHandler,
+    SubEventButtonHandler
 }
 
 

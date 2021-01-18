@@ -13,6 +13,8 @@ const userAuthRoute = require("../server/routes/userAuth")
 const weaponsRoute = require("./routes/weapons")
 const enemiesRoute = require("./routes/enemiesRoute")
 const roomsRoute = require("./routes/roomsRoute")
+const eventsRoute = require("./routes/events")
+
 
 // routes
 app.use("/", registerLoginRoute);
@@ -20,6 +22,8 @@ app.use("/", userAuthRoute);
 app.use("/", weaponsRoute);
 app.use("/", enemiesRoute);
 app.use("/", roomsRoute);
+app.use("/", eventsRoute);
+
 
 
 app.listen(port, (err) => {
