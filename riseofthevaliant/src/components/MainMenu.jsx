@@ -39,9 +39,9 @@ const MainMenu = (props) => {
                 {/* hide continue until a user is logged in */}
                 {token && <Logout />}
 
-
-                {token && <Linker to="/Game" text="Continue" />}
-                {token && <Linker to="/NewGame" text="New Game" />}
+                {/* re activate and configure continue once the feature is added */}
+                {/* {token && <Linker to="/" text="Continue" />} */}
+                {token && <Linker to="/Game" text="New Game" />}
                 <Linker to="/Options" text="Options" />
                 <Linker to="/About" text="About" />
                 <Linker to="/Exit" text="Exit Game" />

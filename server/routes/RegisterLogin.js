@@ -15,7 +15,7 @@ router.post("/Register", async (req, res, next) => {
         const collection = await connectionToMongoDB.db(process.env.DB_NAME).collection(process.env.USERS_COLLECTION)
         const existingUsers = await collection.find({}).toArray();
         const findUser = existingUsers.find((x) => { return x.email === email })
-        console.log(findUser,"findUser in register")
+        console.log(findUser, "findUser in register")
         if (findUser) return res.json({ message: "Email Taken" })
         if (!findUser) {
             const user = { userName: userName, email: email, password: bcrypt.hashSync(password, salt) }

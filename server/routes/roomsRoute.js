@@ -19,38 +19,29 @@ router.get("/rooms", async (req, res, next) => {
 })
 
 
-router.post("/updateRoom"), async (req, res, next) => {
-console.log("arrive")
+router.post("/updateRoom", async (req, res, next) => {
     try {
-        console.log(req.body)
-        return
+        const { email, location } = req.body
         const connectionToMongoDB = await pool();
         const collection = await connectionToMongoDB.db(process.env.DB_NAME).collection(process.env.CHARACTER_COLLECTION)
-        const character = await collection.find({ email: userEmail }).toArray()
-
+        const character = await collection.find({ email: email }).toArray()
+        // console.log(location)
         collection.updateOne(
-            { email: userEmail },
+            { email: email },
             {
-                "$push":
+                "$set":
                 {
-                    "gear": weapon
+                    "location": location
                 }
             }
         )
-        // console.log(collection)
-        console.log(character)
-        // const addWeaponToChar = await character[0].gear.insertOne(weapon);
-        collection.find({ email: userEmail })
-        return
-        // data[0].gear.push(weapon)
-        console.log("data", character)
-        if (!character) return null
-        return character[0]
+        // add chaecking if its empty before
+        // need to check if worked or not
+        return res.json({ message: "update succesful" })
     }
     catch (error) {
-        console.log(error.message, "in get character")
+        console.log(error.message, "in update char room")
     }
-
-}
+})
 
 module.exports = router

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { withAuth } from "../TokenAuth"
 import { connect } from "react-redux"
 import { setCurrentWeapon, setCurrentEnemie, setCurrentEnemieHP, setCharacterHP } from "../../store/actions/actionsConfig"
-import { Modal, Vitals, Linker } from "../../assets/componentImporter"
+import { Modal, Vitals, Linker, RoomHandler } from "../../assets/componentImporter"
 import axios from "axios"
+import { Redirect } from "react-router-dom"
+
 const BattleSystem = (props) => {
-    console.log("battle", props)
+    // console.log("battle", props)
     ////////Hooks////////////
     const [showModal, setShowModal] = useState(false)
     const [modalText, setModalText] = useState("")
@@ -13,21 +15,21 @@ const BattleSystem = (props) => {
     const [battleStart, setBattleStart] = useState("")
     const [updateVitals, setUpdateVitals] = useState(false);
     const [processRunning, setProcessRunning] = useState(false);
-
     // console.log(updateVitals)
 
     useEffect(() => {
         // addWeapon()
-        if(props.monster){
-            battleStarter(props.monster)
-        }
+        setModalText("Hello Nick")
+        setShowModal(true)
+        return
+        battleStarter(props.monster)
         // setting current hp in database? to be determined upon save eature during battle decision handling memory decision    
     }, []);
 
     ////////Functions////////////
     const addWeapon = async () => {
         try {
-            console.log("request out")
+            // console.log("request out")
             const url = `http://localhost:9876/weapons`
             const result = await axios.get(url, { headers: { "Content-Type": "application/json", "weapon": "Longsword", "user": props.currentUser.email } })
             if (result.data.message === "weapon added") {
@@ -41,8 +43,10 @@ const BattleSystem = (props) => {
         }
     }
 
+    // consider adding localised/database message bank
+
     const battleStarter = async (monster) => {
-        console.log(monster)
+        // console.log(monster)
         // this function is to be run autumaticlly upon an enemy encounter
         // recieving enemy name should be modular!!!!
         // alert should include the enemie name!
@@ -52,7 +56,7 @@ const BattleSystem = (props) => {
             const result = await axios.get(url, { headers: { "Content-Type": "application/json", "enemie": enemie } })
             if (result.data.message === "enemie located") {
                 props.dispatch(setCurrentEnemie(result.data.enemie))
-                setBattleText(`You have encountered a ${enemie}! He wants your money or your life!`)
+                setBattleText(`You have encountered a ${enemie}!`)
                 setBattleStart(true)
                 // setBattleText("Battle Start")// maybe delete?
             }
@@ -156,6 +160,8 @@ const BattleSystem = (props) => {
                 props.dispatch(setCurrentEnemie({}))
                 setProcessRunning(false)
                 setBattleStart(false)
+                props.event(props.room, true)
+                return
             }, 800);
             return
         }
@@ -186,7 +192,8 @@ const BattleSystem = (props) => {
         console.log(setChosenAction)
         const enemieAtkMaxDmg = setChosenAction.dmg
         const enemieAtkDmg = Math.floor(Math.random() * enemieAtkMaxDmg + 1)
-        setBattleText(`The ${props.enemie.name} attacks you and deals ${enemieAtkDmg} damage!`)
+        // set attack names to work properly
+        setBattleText(`The ${props.enemie.name} ${setChosenAction.name}'s you and deals ${enemieAtkDmg} damage!`)
         setTimeout(function () {
             enemiTurn2(enemieAtkDmg)
         }, 2000);
@@ -202,7 +209,7 @@ const BattleSystem = (props) => {
 
     const endRound = async () => {
         setProcessRunning(false)
-        await setBattleText("")
+        await setBattleText("Your Turn")
         await setUpdateVitals(false)
     }
     /////////Jsx///////////
@@ -212,7 +219,7 @@ const BattleSystem = (props) => {
             <h1>Battle</h1>
             {/* bellow buttons arent needed in future */}
             {/* <button type="button" onClick={battleStarter}>Initiate Battle Simulation</button> */}
-            <button type="button"><Linker to="/" text="Main Menu" colour="black" /></button>
+            {/* <button type="button"><Linker to="/" text="Main Menu" colour="black" /></button> */}
             { !battleStart ? null : <div className="battleInterface">
                 <h3>{battleText}</h3>
                 <p onClick={characterBattleInterface}>Fight</p>
